@@ -24,13 +24,6 @@ driver.get("https://calendar.ualberta.ca/content.php?filter%5B27%5D=MATH&filter%
 global_course_dic = {}
 
 # neeeded to change this soon
-list_of_CMPUT = ["495", "466", "428", "415",
-                 "402", "328", "313", "304", "204", "195"]  # CMPUT
-list_of_MATH = ["114", "115", "117", "118", "125", "160", "201", "214", "217", "225", "226", "241", "253", "314", "315", "317", "322", "325", "326",
-                "327", "328", "329", "381", "408", "411", "412", "414", "415", "417", "418", "421", "422", "447", "499", "505", "506", "510", "514", "516", "518", "521", "530", "535", "542", "543"]
-list_of_STAT = ["337", "353", "361", "432", "453", "471", "479", "497", "499", "501", "502",
-                "503", "504", "505", "513", "532", "541", "553", "562", "575", "578", "580", "590", "600"]
-list_of_ENG = []
 odd_element_list = []
 # input: outer element <tr>
 
@@ -85,7 +78,8 @@ def first_traversal(list_of_wtf):
 
         # print(a_elem.text)
         if any(item in a_elem.text for item in list_of_wtf):
-            print("save in odd_element_list")
+            print(a_elem.text + "save in odd_element_list")
+            print("================================")
             odd_element_list.append(elem)
             continue
         elem.click()
@@ -130,8 +124,8 @@ def read_list_from_file(subject):
 
 
 # input elements -- Only required to change these
-list_of_wtf = read_list_from_file("ENGL")
-change_course_filter("ENGL")
+list_of_wtf = read_list_from_file("PSYCH")
+change_course_filter("PSYCH")
 first_traversal(list_of_wtf)
 second_traversal(list_of_wtf)
 
