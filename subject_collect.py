@@ -9,14 +9,6 @@ from selenium.webdriver.support.ui import Select
 
 import time
 
-# CMPUT
-# driver.get("https://calendar.ualberta.ca/content.php?filter%5B27%5D=CMPUT&filter%5B29%5D=&filter%5Bkeyword%5D=&filter%5B32%5D=1&filter%5Bcpage%5D=1&cur_cat_oid=39&expand=&navoid=12417&search_database=Filter&filter%5Bexact_match%5D=1#acalog_template_course_filter")
-
-# MATH
-
-
-# STAT
-
 
 global_course_dic = {}
 
@@ -27,15 +19,18 @@ odd_element_list = []
 
 def add_in_course_list(driver, elem):
     temp_course_dic = {}
-    strong_elems = elem.find_elements(By.XPATH, ".//strong")
+    # strong_elems = elem.find_elements(By.XPATH, ".//strong")
     a_elem = elem.find_element(By.CSS_SELECTOR, "a")
     description = elem.find_element(By.CSS_SELECTOR, "div:not([class])")
-    for strong_elem in strong_elems:
-        strong_text = strong_elem.text
-        value = driver.execute_script(
-            "return arguments[0].nextSibling.textContent;", strong_elem).strip()
-        temp_course_dic[strong_text] = value
 
+    # This is so broken
+    # for strong_elem in strong_elems:
+    #     strong_text = strong_elem.text
+    #     value = driver.execute_script(
+    #         "return arguments[0].nextSibling.textContent;", strong_elem).strip()
+    #     temp_course_dic[strong_text] = value
+
+    # ok with this
     p, c = preprocessing_description(description.text)
     temp_course_dic["Prequisite"] = p
     temp_course_dic["Corequisite"] = c
@@ -115,7 +110,7 @@ def change_course_filter(driver, course):
 
 # input: subject name
 def read_list_from_file(subject):
-    file_path = f"odd_subject_list/{subject}.txt"
+    file_path = f"full_force_list/{subject}.txt"
     with open(file_path, 'r') as file:
         lines = file.readlines()
         return [line.strip() for line in lines]
@@ -125,7 +120,7 @@ def run_subject_collect(driver, subject):
     driver.get("https://calendar.ualberta.ca/content.php?filter%5B27%5D=MATH&filter%5B29%5D=&filter%5Bkeyword%5D=&filter%5B32%5D=1&filter%5Bcpage%5D=1&cur_cat_oid=39&expand=&navoid=12417&search_database=Filter&filter%5Bexact_match%5D=1#acalog_template_course_filter")
     list_of_wtf = read_list_from_file(subject)
     change_course_filter(driver, subject)
-    first_traversal(driver, list_of_wtf)
+    # first_traversal(driver, list_of_wtf)
     second_traversal(driver, list_of_wtf)
     print("finished with " + subject)
     driver.quit()
@@ -141,5 +136,3 @@ def run_subject_collect(driver, subject):
 # first_traversal(list_of_wtf)
 # second_traversal(list_of_wtf)
 # print(global_course_dic)
-
-# t = input()
