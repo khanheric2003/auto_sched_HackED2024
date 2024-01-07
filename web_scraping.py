@@ -6,7 +6,7 @@ from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.common.exceptions import StaleElementReferenceException
 from selenium.webdriver.support.ui import Select
-
+import time
 
 # ININITIALIZE FOR SELENIUM
 driver = webdriver.Edge(executable_path=r"D:\a_web_driver\msedgedriver.exe")
@@ -71,15 +71,38 @@ def find_degree_requirement(faculty, start_year, degree_type, subject, certifica
                         './following-sibling::*')
                     print("passed Major")
                     return formatting_course_requirements(next_element.text)
+    elif degree_type == "Specialization":
+        print("Passed1")
+        elems = driver.find_elements(By.CSS_SELECTOR, "a")
+        for elem in elems:
+            if "Bachelor of Science Specialization" in elem.text:
+                elem.click()
+                break
+        elems = driver.find_elements(By.CSS_SELECTOR, "a")
 
-    else:
-        # elems = driver.find_elements(By.CSS_SELECTOR, "a")
-        # for elem in elems:
-        #     if  in elem.text:
-        #         elem.click()
-        #         break
-        return
+        # CLicked
+        for elem in elems:
+            if ("Specialization in " + subject) == elem.text:
 
+                elem.click()
+                inner_div = elem.find_element_by_xpath('..')
+                print("Passed2")
+                print(inner_div)
+
+                ''' HAVENT FINISH HERE LOL'''
+
+    elif degree_type == "General":
+        elems = driver.find_elements(By.CSS_SELECTOR, "a")
+        for elem in elems:
+            if "Bachelor of Science General" in elem.text:
+                elem.click()
+                break
+    else:  # Which is old "Honors"
+        elems = driver.find_elements(By.CSS_SELECTOR, "a")
+        for elem in elems:
+            if "Bachelor of Science Honors" in elem.text:
+                elem.click()
+                break
     '''if faculty == 'Faculty of Engineering':'''
     #     wait = WebDriverWait(driver, 10)
     #     elements = wait.until(
@@ -94,13 +117,6 @@ def find_degree_requirement(faculty, start_year, degree_type, subject, certifica
 
     # their degree just straight up telling them what to do so.... nvm for engg
 
-
-def naviagate_degree_url2(redirect, subject):
-    return
-
-
-def scrap_url(link, main, *minor):
-    return
 
 # output:dictionary
 
@@ -140,7 +156,8 @@ def formatting_course_requirements(text):
 # test
 faculty = 'Faculty of Science'
 # degree type = Honor, Major
-find_degree_requirement(faculty, 2024, "Major", "Applied Mathematics", "")
+find_degree_requirement(faculty, 2022, "Specialization",
+                        "Computing Science", "")
 print(next_elements)
 t = input()
 
