@@ -1,7 +1,6 @@
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+
 from selenium.webdriver.support import expected_conditions as EC
 
 from selenium.common.exceptions import StaleElementReferenceException
@@ -9,14 +8,9 @@ from selenium.webdriver.support.ui import Select
 import time
 
 # ININITIALIZE FOR SELENIUM
-driver = webdriver.Edge(executable_path=r"D:\a_web_driver\msedgedriver.exe")
 
-url = 'https://calendar.ualberta.ca/content.php?catoid=39&navoid=12425#'
 faculty_redirect = {}
 
-
-driver = webdriver.Edge(
-    executable_path=r"D:\a_web_driver\msedgedriver.exe")
 global_req_course_dic = {}
 
 next_elements = []
@@ -24,7 +18,8 @@ next_elements = []
 # return
 
 
-def find_degree_requirement(faculty, start_year, degree_type, subject, certificate):
+def find_degree_requirement(driver, faculty, start_year, degree_type, subject, certificate):
+    url = 'https://calendar.ualberta.ca/content.php?catoid=39&navoid=12425#'
     driver.get(url)
     elements = driver.find_elements(By.ID, 'ent4989')
     for element in elements:
@@ -45,10 +40,12 @@ def find_degree_requirement(faculty, start_year, degree_type, subject, certifica
         elems = driver.find_elements(By.CSS_SELECTOR, "a")
         # choose subject
         for elem in elems:
-            if subject in elem.text:
+            if subject == elem.text:
                 elem.click()
                 break
         if degree_type == "Honors":
+
+            print("passed Honor")
             elems = driver.find_elements(By.CLASS_NAME, "acalog-core")
 
             h2_elements = driver.find_elements(By.CSS_SELECTOR, "h2")
@@ -58,8 +55,11 @@ def find_degree_requirement(faculty, start_year, degree_type, subject, certifica
                         '..')  # At Honors in something
                     next_element = parent_element.find_element_by_xpath(
                         './following-sibling::*')
-                    print("passed Honor")
+                    # driver.quit()
                     return formatting_course_requirements(next_element.text)
+
+            # couldnt find Honors
+
         elif degree_type == "Major":
             elems = driver.find_elements(By.CLASS_NAME, "acalog-core")
             h2_elements = driver.find_elements(By.CSS_SELECTOR, "h2")
@@ -70,7 +70,9 @@ def find_degree_requirement(faculty, start_year, degree_type, subject, certifica
                     next_element = parent_element.find_element_by_xpath(
                         './following-sibling::*')
                     print("passed Major")
+                    # driver.quit()
                     return formatting_course_requirements(next_element.text)
+
     elif degree_type == "Specialization":
         print("Passed1")
         elems = driver.find_elements(By.CSS_SELECTOR, "a")
@@ -154,12 +156,23 @@ def formatting_course_requirements(text):
 
 
 # test
-faculty = 'Faculty of Science'
-# degree type = Honor, Major
-find_degree_requirement(faculty, 2022, "Specialization",
-                        "Computing Science", "")
-print(next_elements)
-t = input()
 
+
+# driver = webdriver.Edge(executable_path=r"D:\a_web_driver\msedgedriver.exe")
+
+# url = 'https://calendar.ualberta.ca/content.php?catoid=39&navoid=12425#'
+# faculty = 'Faculty of Science'
+# # degree type = Honor, Major
+# # find_degree_requirement(faculty, 2022, "Specialization",
+# # "Computing Science", "")
+
+
+# driver = webdriver.Edge(
+#     executable_path=r"D:\a_web_driver\msedgedriver.exe")
+# faculty = 'Faculty of Science'
+# print(find_degree_requirement(driver, faculty, 2024, "Honors",
+#                               "Computing Science", ""))
 
 # holy
+
+# t = input()
